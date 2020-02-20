@@ -188,7 +188,7 @@ type S3SharedCredentials struct {
 	// Profile name. Default to 'default' or ENV['AWS_PROFILE']
 	ProfileName string `json:"profile_name,omitempty"`
 	// Path to the shared file. (default: $HOME/.aws/credentials)
-	Path string `json:"path,omitempty"`
+	Path *secret.Secret `json:"path,omitempty"`
 }
 
 func (c *S3OutputConfig) ToDirective(secretLoader secret.SecretLoader, id string) (types.Directive, error) {
