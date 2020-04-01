@@ -233,6 +233,8 @@ func (r *Reconciler) newCheckPod(hashKey string) *v1.Pod {
 					Args: []string{
 						"fluentd", "-c",
 						fmt.Sprintf("/fluentd/etc/%s", ConfigKey),
+						"-r",
+						"/fluentd/plugins/elasticsearch_simple_sniffer.rb",
 						"--dry-run",
 					},
 					VolumeMounts: []v1.VolumeMount{

@@ -69,11 +69,13 @@ RUN addgroup -S fluent && adduser -S -G fluent fluent \
     && chown -R fluent /fluentd && chgrp -R fluent /fluentd \
     && mkdir -p /buffers && chown -R fluent /buffers
 
+# Copy sniffer for loading easier.
+RUN sniffer=$( gem contents fluent-plugin-elasticsearch|grep elasticsearch_simple_sniffer.rb ) ; \
+    cp $sniffer /fluentd/plugins
 
 COPY fluent.conf /fluentd/etc/
 COPY entrypoint.sh /bin/
 COPY healthy.sh /bin/
-
 
 ENV FLUENTD_CONF="fluent.conf"
 

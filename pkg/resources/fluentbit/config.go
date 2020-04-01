@@ -18,7 +18,7 @@ var fluentBitConfigTemplate = `
 [SERVICE]
     Flush        1
     Daemon       Off
-    Log_Level    debug
+    Log_Level    info
     Parsers_File parsers.conf
     {{- if .Monitor.Enabled }}
     HTTP_Server  On

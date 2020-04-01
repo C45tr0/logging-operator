@@ -106,9 +106,14 @@ func (r *Reconciler) fluentContainer() *corev1.Container {
 		Name:            "fluentd",
 		Image:           r.Logging.Spec.FluentdSpec.Image.Repository + ":" + r.Logging.Spec.FluentdSpec.Image.Tag,
 		ImagePullPolicy: corev1.PullPolicy(r.Logging.Spec.FluentdSpec.Image.PullPolicy),
-		Ports:           generatePorts(r.Logging.Spec.FluentdSpec),
-		VolumeMounts:    r.generateVolumeMounts(),
-		Resources:       r.Logging.Spec.FluentdSpec.Resources,
+		Args: []string{
+			"fluentd",
+			"-r",
+			"/fluentd/plugins/elasticsearch_simple_sniffer.rb",
+		},
+		Ports:        generatePorts(r.Logging.Spec.FluentdSpec),
+		VolumeMounts: r.generateVolumeMounts(),
+		Resources:    r.Logging.Spec.FluentdSpec.Resources,
 		Env: []corev1.EnvVar{
 			{
 				Name:  "BUFFER_PATH",
@@ -130,6 +135,8 @@ func (r *Reconciler) fluentContainer() *corev1.Container {
 	if r.Logging.Spec.FluentdSpec.FluentOutLogrotate != nil && r.Logging.Spec.FluentdSpec.FluentOutLogrotate.Enabled {
 		container.Args = []string{
 			"fluentd",
+			"-r",
+			"/fluentd/plugins/elasticsearch_simple_sniffer.rb",
 			"-o", r.Logging.Spec.FluentdSpec.FluentOutLogrotate.Path,
 			"--log-rotate-age", r.Logging.Spec.FluentdSpec.FluentOutLogrotate.Age,
 			"--log-rotate-size", r.Logging.Spec.FluentdSpec.FluentOutLogrotate.Size,
